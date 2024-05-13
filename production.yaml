@@ -1,5 +1,5 @@
 runtime: nodejs20
-service: web-chat-app-staging
+service: web-chat-app-production
 
 vpc_access_connector:
   name: "projects/valid-hall-420612/locations/asia-southeast2/connectors/connect-db"
