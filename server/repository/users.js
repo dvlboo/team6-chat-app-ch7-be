@@ -5,6 +5,7 @@ const { uploader } = require('../../src/helper/cloudinary')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const path = require('path')
+const axios = require('axios')
 
 exports.createUser = async (payload) => {
   // encrypt the pass
@@ -19,6 +20,11 @@ exports.createUser = async (payload) => {
 
     const imageUpload = await uploader(photo)
     payload.photo = imageUpload.secure_url
+  }
+
+  // validation for picture from google login
+  if (payload?.picture) {
+    payload.photo = payload?.picture
   }
 
   return data = await user.create(payload) 
@@ -51,6 +57,12 @@ exports.getUserByEmail = async (email) => {
   }
 
   throw new Error(`Users is Not Found`)
+}
+
+// get user data using access_token from google
+exports.getGoogleAccessTokenData = async (accessToken) => {
+  const { data } = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`)
+  return data
 }
 
 exports.updateUser = async(id, payload) => {

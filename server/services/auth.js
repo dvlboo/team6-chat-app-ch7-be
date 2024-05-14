@@ -1,4 +1,4 @@
-const { createUser, getUserById, getUserByEmail, updateUser, deleteUser } = require('../repository/users')
+const { createUser, getUserById, getUserByEmail, updateUser, deleteUser, getGoogleAccessTokenData } = require('../repository/users')
 const jsonwebtoken = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
@@ -70,6 +70,42 @@ exports.login = async (payload) => {
     token
   }
 }
+
+exports.googleLogin = async (accessToken) => {
+  // validate the token and get the data from google
+  const googleData = await getGoogleAccessTokenData(accessToken);
+
+  // get is there any existing user with the email
+  let user = await getUserByEmail(googleData?.email);
+
+  // if not found
+  if (!user) {
+    // Create new user based on google data that get by access_token
+    user = await createUser({
+      email: googleData?.email,
+      password: "",
+      name: googleData?.given_name,
+      picture: googleData?.picture,
+    });
+  }
+
+  // Delete object password from user
+  delete user?.dataValues?.password;
+
+  // create token
+  const jwtPayload = {
+    id : user.id
+  }
+
+  const token = jsonwebtoken.sign(jwtPayload, process.env.JWT_SECRET, {
+    expiresIn : '2h'
+  })
+  return data = {
+    user,
+    token
+  }
+
+};
 
 exports.updateUser = async (id, payload) => data = await updateUser(id, payload)
 
