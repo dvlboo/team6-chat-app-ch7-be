@@ -1,4 +1,4 @@
-const { message, user } = require("../models")
+const { message } = require("../../models")
 
 exports.getMessages = async () => {
   try {
