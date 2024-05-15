@@ -63,7 +63,8 @@ exports.getUserByEmail = async (email) => {
 
 // get user data using access_token from google
 exports.getGoogleAccessTokenData = async (accessToken) => {
-  return { data } = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`)
+  const response = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`)
+  return response.data
 }
 
 exports.updateUser = async(id, payload) => {
