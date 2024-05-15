@@ -2,12 +2,11 @@ const { message, user } = require("../../models")
 
 exports.getMessages = async () => {
   try {
-    const data = await message.findAll({
+    return data = await message.findAll({
       include: {
         model: user
       }
     })
-    return data
   } catch (error) {
     throw error
   }
@@ -24,8 +23,7 @@ exports.getMessages = async () => {
 
 exports.createMessage = async (payload) => {
   try {
-    const data = await message.create(payload)
-    return data
+    return data = await message.create(payload)
   } catch (error) {
     throw error
   }
@@ -33,8 +31,7 @@ exports.createMessage = async (payload) => {
 
 exports.deleteMessage = async (id) => {
   try {
-    const data = await message.destroy({ where: { id } })
-    return data
+    return data = await message.destroy({ where: { id } })
   } catch (error) {
     throw error
   }
