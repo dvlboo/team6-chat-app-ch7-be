@@ -31,11 +31,10 @@ exports.register = async (req, res, next) => {
       name, password, email, photo
     })
 
-    const response = {
+    res.status(200).json({
       message : "Register Success",
       data
-    }
-    res.status(200).json(response)
+    })
 
   } catch (error) {
     next(error)

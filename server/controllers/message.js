@@ -1,8 +1,4 @@
-const {
-  getMessages,
-  createMessage,
-  deleteMessage,
-} = require("../services/message")
+const { getMessages, createMessage, deleteMessage } = require("../services/message")
 
 exports.getMessages = async (req, res, next) => {
   try {

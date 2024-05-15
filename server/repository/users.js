@@ -11,15 +11,17 @@ exports.createUser = async (payload) => {
   // encrypt the pass
   payload.password = bcrypt.hashSync(payload.password, 10)
 
-  if (payload.photo) {
-    const { photo } = payload
+  const { photo } = payload
 
+  if (photo) {
     photo.publicId = crypto.randomBytes(16).toString('hex')
 
     photo.name = `${photo.publicId}${path.parse(photo.name).ext}`
 
     const imageUpload = await uploader(photo)
     payload.photo = imageUpload.secure_url
+  } else {
+    payload.photo = null
   }
 
   // validation for picture from google login
@@ -61,8 +63,7 @@ exports.getUserByEmail = async (email) => {
 
 // get user data using access_token from google
 exports.getGoogleAccessTokenData = async (accessToken) => {
-  const { data } = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`)
-  return data
+  return { data } = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`)
 }
 
 exports.updateUser = async(id, payload) => {
@@ -76,7 +77,12 @@ exports.updateUser = async(id, payload) => {
     const imageUpload = await uploader(photo)
     payload.photo = imageUpload.secure_url
   } else {
-    payload.photo = ' '
+    payload.photo = null
+  }
+
+  // validation for picture from google login
+  if (payload?.picture) {
+    payload.photo = payload?.picture
   }
   
   await user.update(payload, {
