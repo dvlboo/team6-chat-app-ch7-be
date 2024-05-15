@@ -4,6 +4,7 @@ exports.register = async (req, res, next) => {
   try {
     // get body
     const { name, password, email } = req.body
+    
     // get files
     const { photo } = req.files
 

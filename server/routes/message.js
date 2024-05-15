@@ -8,6 +8,7 @@ router
   .get(authMiddelware(), getMessages)
   .post(authMiddelware(), createMessage)
 
-router.route("/:id").delete(authMiddelware(), deleteMessage)
+router.route("/:id")
+  .delete(authMiddelware(), deleteMessage)
 
 module.exports = router
