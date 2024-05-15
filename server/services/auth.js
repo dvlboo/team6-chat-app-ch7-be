@@ -1,4 +1,4 @@
-const { createUser, getUserById, getUserByEmail, updateUser, deleteUser, getGoogleAccessTokenData } = require('../repository/users')
+const { createUser, getUserById, getUserByEmail, updateUser, deleteUser, getGoogleAccessTokenData, getUserByGoogleEmail } = require('../repository/users')
 const jsonwebtoken = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
@@ -76,7 +76,7 @@ exports.googleLogin = async (accessToken) => {
   const googleData = await getGoogleAccessTokenData(accessToken);
 
   // get is there any existing user with the email
-  let user = await getUserByEmail(googleData?.email);
+  let user = await getUserByGoogleEmail(googleData?.email);
 
   // if not found
   if (!user) {
