@@ -61,6 +61,15 @@ exports.getUserByEmail = async (email) => {
   throw new Error(`Users is Not Found`)
 }
 
+exports.getUserByGoogleEmail = async (email) => {
+
+  const data = await user.findOne({
+    where : { email }
+  })
+
+  return data
+}
+
 // get user data using access_token from google
 exports.getGoogleAccessTokenData = async (accessToken) => {
   const response = await axios.get(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`)
