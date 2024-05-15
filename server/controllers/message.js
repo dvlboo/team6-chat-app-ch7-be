@@ -3,6 +3,9 @@ const { getMessages, createMessage, deleteMessage } = require("../services/messa
 exports.getMessages = async (req, res, next) => {
   try {
     const data = await getMessages()
+
+    req.io.emit("getAllMessages");
+
     res.status(200).json({
       message: "Success to Get Messages",
       data,
@@ -45,6 +48,10 @@ exports.createMessage = async (req, res, next) => {
         statusCode: 400,
       })
     }
+
+    // Emit event
+    req.io.emit("message", message);
+    
     res.status(200).json({
       message: "Success to Create Message",
       data,
