@@ -4,7 +4,7 @@ const {
   deleteMessage,
 } = require("../services/message")
 
-exports.getMessages = async (req, res) => {
+exports.getMessages = async (req, res, next) => {
   try {
     const data = await getMessages()
     res.status(200).json({
@@ -16,21 +16,32 @@ exports.getMessages = async (req, res) => {
   }
 }
 
+// exports.getMessagesByUserId = async (req, res, next) => {
+//   try {
+//     const user_id = req?.user?.id
+
+//     const data = await getMessagesByUserId(user_id)
+//     res.status(200).json({
+//       message: "Success to Get Messages",
+//       data,
+//     })
+//   } catch (error) {
+//     next(error)
+//   }
+// }
+
 exports.createMessage = async (req, res, next) => {
   try {
-    const { message, user_id } = req.body
+    const { message } = req.body
+    const user_id = req?.user?.id
+
     if (!message || message == "") {
       return next({
         message: "Message are required!!",
         statusCode: 400,
       })
     }
-    if (!user_id || user_id == "") {
-      return next({
-        message: "User Id are required!!",
-        statusCode: 400,
-      })
-    }
+
     const data = await createMessage({ message, user_id })
     if (!data) {
       return next({

@@ -51,6 +51,11 @@ exports.login = async (payload) => {
     throw new Error (`Invalid Password`)
   }
 
+  // delete password
+  user?.dataValues?.password 
+    ? delete user?.dataValues?.password
+    : delete user?.password
+
   // create token
   const jwtPayload = {
     id : user.id
@@ -59,11 +64,6 @@ exports.login = async (payload) => {
   const token = jsonwebtoken.sign(jwtPayload, process.env.JWT_SECRET, {
     expiresIn : '2h'
   })
-  
-  // delete password
-  user?.dataValues?.password 
-    ? delete user?.dataValues?.password
-    : delete user?.password
 
   return data = {
     user,
@@ -94,7 +94,7 @@ exports.googleLogin = async (accessToken) => {
 
   // create token
   const jwtPayload = {
-    id : user.id
+    id : user?.id
   }
 
   const token = jsonwebtoken.sign(jwtPayload, process.env.JWT_SECRET, {
