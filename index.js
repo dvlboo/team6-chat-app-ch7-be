@@ -69,15 +69,24 @@ app.use((err, req, res, next) => {
   })
 })
 
+const connectedUsers = {}
+console.log(connectedUsers)
+
 io.on("connection", (socket) => {
   console.log(socket.id + " connected!");
 
-  socket.on("disconnect", (reason) => {
-    console.log(socket.id + " disconnected because " + reason);
+  socket.on("userConnected", (users) => {
+    connectedUsers[socket.id] = users;
+    io.emit("connectedUsers", Object.values(connectedUsers));
+  });
+
+  // Saat pengguna terputus
+  socket.on("disconnect", () => {
+    delete connectedUsers[socket.id];
+    io.emit("connectedUsers", Object.values(connectedUsers));
   });
 
   socket.on("typing", () => {
-    console.log('typ');
     io.emit("ontyping");
   });
 });
